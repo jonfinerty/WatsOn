@@ -1,0 +1,60 @@
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="description" content="What's playing on Spotbox">
+		<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+		<style type="text/css">
+			body {
+				color: white;
+				background-color: black;
+				font-family: 'Roboto', sans-serif;
+				font-size: 32px;
+			}
+
+			h1 {
+				text-align: center;
+			}
+
+			img {
+				display:block;
+    			margin:auto;
+				max-width: 640px;
+				max-height: 640px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h1 id="title"></h1>
+		<img id="cover" src="http://localhost:4050/playing/cover.jpeg"/>
+		<h1 id="artists"></h1>
+
+		<script src="jquery-1.6.4.min.js"></script>
+		<script src="jquery.signalR-2.0.3.min.js"></script>
+		<script src="http://localhost:4050/signalr/hubs"></script>
+		<script type="text/javascript">
+			$(function () {
+				var spotboxUrl = 'http://localhost:4050'
+
+				$.connection.hub.url = spotboxUrl + '/signalr'
+
+				$.connection.pushHub.client.newTrack = function (trackJsonString) {
+					var track = $.parseJSON(trackJsonString);
+					$('#title').text(track.Name);
+					$('#artists').text(track.Artists.join(', '));
+					// reload and cache bust image
+					$('#cover').attr("src", spotboxUrl + "/playing/cover.jpeg?" + new Date().getTime());
+				};
+
+				$.connection.hub.start().done(function () {
+					console.log( 'Connection established!' );
+					$.connection.pushHub.server.requestTrack();
+				});
+			});
+		</script>
+
+	</body>
+</html>
