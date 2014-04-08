@@ -29,15 +29,15 @@
 
 	<body>
 		<h1 id="title"></h1>
-		<img id="cover" src="http://localhost:4050/playing/cover.jpeg"/>
+		<img id="cover" src="http://localhost:80/playing/cover.jpeg"/>
 		<h1 id="artists"></h1>
 
 		<script src="jquery-1.6.4.min.js"></script>
 		<script src="jquery.signalR-2.0.3.min.js"></script>
-		<script src="http://localhost:4050/signalr/hubs"></script>
+		<script src="http://localhost:80/signalr/hubs"></script>
 		<script type="text/javascript">
 			$(function () {
-				var spotboxUrl = 'http://localhost:4050'
+				var spotboxUrl = 'http://localhost:80'
 
 				$.connection.hub.url = spotboxUrl + '/signalr'
 
