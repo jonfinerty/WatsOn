@@ -45,14 +45,20 @@
 					var track = $.parseJSON(trackJsonString);
 					$('#title').text(track.Name);
 					$('#artists').text(track.Artists.join(', '));
-					// reload and cache bust image
 					$('#cover').attr("src", spotboxUrl + "/playing/cover.jpeg?" + new Date().getTime());
-				};
+				}
 
-				$.connection.hub.start().done(function () {
-					console.log( 'Connection established!' );
-					$.connection.pushHub.server.requestTrack();
+				$.connection.hub.disconnected(function() {
+					setTimeout(connectToSpotbox, 5000);
 				});
+
+				connectToSpotbox();
+
+				function connectToSpotbox() {
+					$.connection.hub.start().done(function () {
+						$.connection.pushHub.server.requestTrack();
+					});
+				}
 			});
 		</script>
 
