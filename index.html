@@ -11,26 +11,66 @@
 				color: white;
 				background-color: black;
 				font-family: 'Roboto', sans-serif;
-				font-size: 32px;
+				font-size: 18px;
 			}
 
-			h1 {
+			.left-column {
+				width: 50%;
+				float: left;
+			}
+
+			.large-text {
+				font-size: 48px;
 				text-align: center;
+			}
+
+			.connected {
+				display: inline-block;
+				border-radius: 50%;
+				background: #BADA55;
+				width: 10px;
+				height: 10px;
+				margin-left: 10px;
+				margin-right: 6px;
+			}
+
+			.disconnected {
+				display: inline-block;
+				border-radius: 50%;
+				background: red;
+				width: 10px;
+				height: 10px;
+				margin-left: 10px;
+				margin-right: 6px;
 			}
 
 			img {
 				display:block;
     			margin:auto;
+    			width: 100%;
 				max-width: 640px;
 				max-height: 640px;
 			}
+
+			#connected-state {
+				position: absolute;
+				bottom: 0;
+				right: 0;
+			}
+
 		</style>
 	</head>
 
 	<body>
-		<h1 id="title"></h1>
-		<img id="cover" src="http://localhost:4050/playing/cover.jpeg"/>
-		<h1 id="artists"></h1>
+		<div class="left-column">
+			<p id="title" class="large-text"></p>
+			<img id="cover" src="http://localhost:4050/playing/cover.jpeg"/>
+			<p id="artists" class="large-text"></p>
+		</div>
+
+		<div class="right-column">
+			<div id="connected-state">disconnected.<div class='disconnected'></div></div>
+		</div>
 
 		<script src="jquery-1.6.4.min.js"></script>
 		<script src="jquery.signalR-2.0.3.min.js"></script>
@@ -49,6 +89,7 @@
 				}
 
 				$.connection.hub.disconnected(function() {
+					$('#connected-state').html("disconnected.<div class='disconnected'></div>");
 					setTimeout(connectToSpotbox, 5000);
 				});
 
@@ -56,6 +97,7 @@
 
 				function connectToSpotbox() {
 					$.connection.hub.start().done(function () {
+						$('#connected-state').html("connected.<div class='connected'></div>");
 						$.connection.pushHub.server.requestTrack();
 					});
 				}
